@@ -70,6 +70,9 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
+    // Project
+    implementation(project(":core"))
+
     // koin
     implementation(libs.koin.core)
     implementation(libs.koin.android)
