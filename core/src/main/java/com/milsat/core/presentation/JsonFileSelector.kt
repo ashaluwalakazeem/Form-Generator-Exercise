@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.OpenableColumns
-import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import com.milsat.core.common.Logger
 import java.io.BufferedReader

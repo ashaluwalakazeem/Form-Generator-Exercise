@@ -75,4 +75,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     ksp(libs.androidx.room.compiler)
+
+    // GSON
+    implementation(libs.gson)
 }

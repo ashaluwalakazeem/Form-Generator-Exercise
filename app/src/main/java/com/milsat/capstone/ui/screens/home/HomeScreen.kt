@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -49,11 +50,12 @@ fun HomeScreen(onNavigateToRoute: (String) -> Unit) {
         modifier = Modifier
             .fillMaxSize(),
         floatingActionButton = {
-            FloatingActionButton(
+            ExtendedFloatingActionButton(
                 onClick = {
                     viewModel.selectNewConfigurationFile(launcher)
                 },
             ) {
+                Text(text = "Create a New Form")
                 Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add")
             }
         },
