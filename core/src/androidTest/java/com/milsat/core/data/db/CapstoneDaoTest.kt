@@ -61,7 +61,8 @@ class CapstoneDaoTest : KoinTest {
             showOnList = true,
             uiType = UIType.text_field,
             values = null,
-            id = 1
+            id = 1,
+            pageName = "BUILDING_MAPPING"
         )
         capstoneDao.insertFieldsEntity(fieldsEntity)
 

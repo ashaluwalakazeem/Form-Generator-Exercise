@@ -6,5 +6,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "forms")
 data class FormEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val name: String
+    val name: String,
+    val pageCount: Int
 )
