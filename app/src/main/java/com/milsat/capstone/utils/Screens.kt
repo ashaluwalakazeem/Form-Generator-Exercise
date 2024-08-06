@@ -10,7 +10,8 @@ enum class Screens(
     private val obligatoryArgs: List<String>? = null,
     private val optionalArgs: List<String>? = null
 ) {
-    Home;
+    Home,
+    Form(obligatoryArgs = listOf(ArgumentBundleKeys.Form.FORM_ID, ArgumentBundleKeys.Form.FORM_TYPE));
 
     operator fun invoke(): String {
         val argList = StringBuilder()

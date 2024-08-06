@@ -1,6 +1,7 @@
 package com.milsat.core.data.repository
 
 import com.milsat.core.data.db.CapstoneDao
+import com.milsat.core.data.db.entities.FieldsEntity
 import com.milsat.core.data.db.entities.FormEntity
 import com.milsat.core.domain.model.Configuration
 import com.milsat.core.domain.repository.FormRepository
@@ -53,6 +54,10 @@ internal class FormRepositoryImpl(
 
     override fun getAllFormEntities(): Flow<List<FormEntity>> {
         return capstoneDao.getAllFormEntities()
+    }
+
+    override suspend fun fetchAllFormFields(formId: Int): List<FieldsEntity> {
+        return capstoneDao.getFieldsByFormId(formId)
     }
 
 }

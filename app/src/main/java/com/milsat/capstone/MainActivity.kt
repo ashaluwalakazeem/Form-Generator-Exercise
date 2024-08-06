@@ -13,11 +13,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.milsat.capstone.ui.screens.form.FormScreen
 import com.milsat.capstone.ui.screens.home.HomeScreen
 import com.milsat.capstone.ui.theme.CapstoneTheme
+import com.milsat.capstone.utils.ArgumentBundleKeys
 import com.milsat.capstone.utils.Screens
 
 class MainActivity : ComponentActivity() {
@@ -45,6 +49,31 @@ fun RootNavigation(modifier: Modifier = Modifier) {
                         launchSingleTop = true
                     }
                 }
+            )
+        }
+        composable(
+            route = Screens.Form(),
+            arguments = listOf(
+                navArgument(
+                    name = ArgumentBundleKeys.Form.FORM_ID,
+                    builder = {
+                        type = NavType.StringType
+                    }
+                ),
+                navArgument(
+                    name = ArgumentBundleKeys.Form.FORM_TYPE,
+                    builder = {
+                        type = NavType.StringType
+                    }
+                ),
+            )
+        ) { backStackEntry ->
+            val formName = backStackEntry.arguments?.getString(ArgumentBundleKeys.Form.FORM_TYPE) ?: return@composable
+            FormScreen(
+                onNavigateBack = {
+                    navController.navigateUp()
+                },
+                formTitle = formName
             )
         }
     }

@@ -26,7 +26,7 @@ internal data class Configuration(
                 columnName = columnName,
                 pageName = pageName,
                 fieldTitle = fieldTitle,
-                columnType = columnType,
+                columnType = columnType.toColumnType(),
                 required = required,
                 minLength = minLength,
                 maxLength = maxLength,

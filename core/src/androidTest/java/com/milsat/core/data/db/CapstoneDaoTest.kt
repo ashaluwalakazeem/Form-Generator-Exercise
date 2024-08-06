@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.milsat.core.data.db.entities.FieldsEntity
 import com.milsat.core.data.db.entities.FormEntity
 import com.milsat.core.di.dbTestModule
+import com.milsat.core.domain.model.ColumnType
 import com.milsat.core.domain.model.UIType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
@@ -54,7 +55,7 @@ class CapstoneDaoTest : KoinTest {
             formId = formEntity.id, // Use the form ID
             columnName = "NAME_BLD",
             fieldTitle = "Name of Building",
-            columnType = "TEXT",
+            columnType = ColumnType.TEXT,
             required = true,
             minLength = 0,
             maxLength = 500,

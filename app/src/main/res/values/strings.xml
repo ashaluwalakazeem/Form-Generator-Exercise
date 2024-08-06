@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Capstone - Kazeem</string>
+    <string name="is_required">is required</string>
+    <string name="not_required">not required</string>
+    <string name="requires">%1$s requires %2$s %3$s</string>
+    <string name="digits">digits</string>
+    <string name="characters">characters</string>
+    <string name="requires_a_minimum_number_of">%1$s requires a minimum number of %2$s %3$s</string>
+    <string name="maximum_is">Maximum %1$s is %2$s</string>
+    <string name="invalid_input">Invalid input</string>
+    <string name="please_enter_a_valid">Please enter a valid %1$s</string>
+    <string name="please_a_valid">Please %1$s a valid %2$s</string>
+    <string name="select">select</string>
+    <string name="enter">enter</string>
+    <string name="must_match">%1$s must match %2$s</string>
 </resources>

@@ -7,8 +7,8 @@ import com.milsat.core.data.db.entities.FormEntity
 
 
 @Database(entities = [FieldsEntity::class, FormEntity::class], version = 1)
-@TypeConverters(StringListConverter::class, UITypeConverter::class)
-abstract class CapstoneDatabase : RoomDatabase() {
+@TypeConverters(StringListConverter::class, UITypeConverter::class, ColumnTypeConverter::class)
+internal abstract class CapstoneDatabase : RoomDatabase() {
 
     abstract fun capstoneDao(): CapstoneDao
 }

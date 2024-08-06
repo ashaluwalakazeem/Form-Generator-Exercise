@@ -10,7 +10,7 @@ import com.milsat.core.data.db.entities.FormEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface CapstoneDao {
+internal interface CapstoneDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFormEntity(formEntity: FormEntity): Long
@@ -18,14 +18,20 @@ interface CapstoneDao {
     @Query("SELECT * FROM forms")
     fun getAllFormEntities(): Flow<List<FormEntity>>
 
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFieldsEntity(fieldsEntity: FieldsEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFieldsEntities(fieldsEntities: List<FieldsEntity>)
 
+
+
     @Update
     suspend fun updateFieldEntity(fieldsEntity: FieldsEntity): Int
+
+    @Update
+    suspend fun updateFieldEntities(fieldsEntities: List<FieldsEntity>)
 
     @Query("SELECT * FROM fields WHERE formId = :formId")
     suspend fun getFieldsByFormId(formId: Int): List<FieldsEntity>

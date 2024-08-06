@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.milsat.capstone.R
+import com.milsat.capstone.utils.Screens
 import com.milsat.core.data.db.entities.FormEntity
 import com.milsat.core.utils.Logger
 import org.koin.androidx.compose.koinViewModel
@@ -67,7 +68,19 @@ fun HomeScreen(onNavigateToRoute: (String) -> Unit) {
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {
-                    viewModel.selectNewConfigurationFile(launcher)
+                    viewModel.selectNewConfigurationFile(
+                        launcher = launcher,
+                        onProceed = { formField ->
+                            onNavigateToRoute(
+                                Screens.Form.withArgs(
+                                    obligatoryParams = listOf(
+                                        formField.id,
+                                        formField.name
+                                    )
+                                )
+                            )
+                        }
+                    )
                 },
             ) {
                 Text(text = "Create a New Form")
@@ -116,7 +129,16 @@ fun HomeScreen(onNavigateToRoute: (String) -> Unit) {
                         modifier = Modifier
                             .fillMaxWidth(),
                         formEntity = item,
-                        onClick = {},
+                        onClick = {
+                            onNavigateToRoute(
+                                Screens.Form.withArgs(
+                                    obligatoryParams = listOf(
+                                        item.id,
+                                        item.name
+                                    )
+                                )
+                            )
+                        },
                         displayDivider = allFormState.last() != item
                     )
                 }

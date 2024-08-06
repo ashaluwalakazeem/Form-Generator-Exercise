@@ -3,6 +3,7 @@ package com.milsat.core.data.db
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.milsat.core.domain.model.ColumnType
 import com.milsat.core.domain.model.UIType
 
 class StringListConverter {
@@ -22,11 +23,23 @@ class StringListConverter {
 class UITypeConverter {
     @TypeConverter
     fun fromUIType(value: UIType): String {
-        return value.name
+        return value.name.lowercase()
     }
 
     @TypeConverter
     fun toUIType(value: String): UIType {
-        return UIType.valueOf(value)
+        return UIType.valueOf(value.uppercase())
+    }
+}
+
+class ColumnTypeConverter {
+    @TypeConverter
+    fun fromColumnType(value: ColumnType): String {
+        return value.name
+    }
+
+    @TypeConverter
+    fun toColumnType(value: String): ColumnType {
+        return ColumnType.valueOf(value)
     }
 }
