@@ -10,6 +10,7 @@ val dbTestModule = module {
     single<CapstoneDatabase> {
         inMemoryDatabaseBuilder(androidContext(), CapstoneDatabase::class.java)
             .allowMainThreadQueries()
+            .setQueryExecutor { command -> command.run() }
             .build()
     }
     single { get<CapstoneDatabase>().capstoneDao() }
