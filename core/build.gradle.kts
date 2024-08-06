@@ -58,9 +58,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    debugImplementation(libs.androidx.ui.test.manifest)
 
     // koin
     implementation(libs.koin.core)
@@ -69,13 +66,29 @@ dependencies {
 
     // Room DB
     implementation(libs.androidx.room.runtime)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
+    implementation(libs.androidx.junit.ktx)
     annotationProcessor(libs.androidx.room.compiler)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     ksp(libs.androidx.room.compiler)
+    implementation("androidx.room:room-ktx:2.6.1")
 
     // GSON
     implementation(libs.gson)
+
+    //Testing dependencies
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    testImplementation("io.insert-koin:koin-test:3.1.2")
+    testImplementation("io.insert-koin:koin-test-junit4:3.1.2")
+    androidTestImplementation("io.insert-koin:koin-test:3.1.2")
+    androidTestImplementation("io.insert-koin:koin-test-junit4:3.1.2")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("androidx.room:room-testing:")
+    testImplementation("androidx.test:runner:1.4.0")
+
 }
