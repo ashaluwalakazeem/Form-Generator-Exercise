@@ -4,6 +4,8 @@ import androidx.room.Room.databaseBuilder
 import com.milsat.core.data.db.CapstoneDatabase
 import com.milsat.core.data.repository.FormRepositoryImpl
 import com.milsat.core.domain.repository.FormRepository
+import com.milsat.core.domain.usecase.CreateNewFormUseCase
+import com.milsat.core.domain.usecase.GetAllFormUseCase
 import com.milsat.core.utils.JsonFileSelector
 import com.milsat.core.utils.ConfigurationPasser
 import org.koin.android.ext.koin.androidApplication
@@ -26,4 +28,8 @@ val coreModules = module {
 
     // Repositories
     single<FormRepository> { FormRepositoryImpl(get(), get()) }
+
+    // UseCases
+    factoryOf(::CreateNewFormUseCase)
+    factoryOf(::GetAllFormUseCase)
 }
