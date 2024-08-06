@@ -1,5 +1,6 @@
 package com.milsat.core.domain.model
 
+import com.milsat.core.data.db.entities.FieldsEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,7 +19,23 @@ internal data class Configuration(
         @SerialName("max_length") val maxLength: Int? = null,
         @SerialName("showOnList") val showOnList: Boolean? = null,
         val values: List<String>? = null
-    )
+    ){
+        fun toDomain(formId: Int, fieldTitle: String, pageName: String): FieldsEntity{
+            return FieldsEntity(
+                formId = formId,
+                columnName = columnName,
+                pageName = pageName,
+                fieldTitle = fieldTitle,
+                columnType = columnType,
+                required = required,
+                minLength = minLength,
+                maxLength = maxLength,
+                showOnList = showOnList,
+                uiType = uiType.toUIType(),
+                values = values
+            )
+        }
+    }
 
     @Serializable
     internal data class Page(

@@ -1,4 +1,4 @@
-package com.milsat.core.presentation
+package com.milsat.core.utils
 
 
 import android.content.Context
@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.activity.result.ActivityResultLauncher
-import com.milsat.core.common.Logger
 import java.io.BufferedReader
 import java.io.InputStreamReader
 

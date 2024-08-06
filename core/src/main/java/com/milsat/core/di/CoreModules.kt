@@ -4,7 +4,7 @@ import androidx.room.Room.databaseBuilder
 import com.milsat.core.data.db.CapstoneDatabase
 import com.milsat.core.data.repository.FormRepositoryImpl
 import com.milsat.core.domain.repository.FormRepository
-import com.milsat.core.presentation.JsonFileSelector
+import com.milsat.core.utils.JsonFileSelector
 import com.milsat.core.utils.ConfigurationPasser
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.factoryOf
@@ -25,5 +25,5 @@ val coreModules = module {
 
 
     // Repositories
-    single<FormRepository> { FormRepositoryImpl(get()) }
+    single<FormRepository> { FormRepositoryImpl(get(), get()) }
 }

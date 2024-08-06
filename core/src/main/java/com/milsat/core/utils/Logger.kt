@@ -1,4 +1,4 @@
-package com.milsat.core.common
+package com.milsat.core.utils
 
 import android.util.Log
 import com.milsat.core.BuildConfig

@@ -2,6 +2,7 @@ package com.milsat.core.data.db
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.milsat.core.data.db.entities.FieldsEntity
@@ -11,15 +12,17 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CapstoneDao {
 
-    @Insert
-    suspend fun insertFormEntity(formEntity: FormEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFormEntity(formEntity: FormEntity): Long
 
     @Query("SELECT * FROM forms")
     fun getAllFormEntities(): Flow<List<FormEntity>>
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFieldsEntity(fieldsEntity: FieldsEntity): Long
 
-    @Insert
-    suspend fun insertFieldsEntity(fieldsEntity: FieldsEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFieldsEntities(fieldsEntities: List<FieldsEntity>)
 
     @Update
     suspend fun updateFieldEntity(fieldsEntity: FieldsEntity): Int

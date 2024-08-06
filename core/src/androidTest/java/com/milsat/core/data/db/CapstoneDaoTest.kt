@@ -46,28 +46,29 @@ class CapstoneDaoTest : KoinTest {
     @Test
     fun insertAndUpdateFields() = runTest {
         // Insert a form entity
-        val formEntity = FormEntity(name = "Test Form")
+        val formEntity = FormEntity(name = "Test Form", pageCount = 2)
         capstoneDao.insertFormEntity(formEntity)
 
         // Insert a fields entity
         val fieldsEntity = FieldsEntity(
             formId = formEntity.id, // Use the form ID
             columnName = "NAME_BLD",
-            columnTitle = "Name of Building",
+            fieldTitle = "Name of Building",
             columnType = "TEXT",
             required = true,
             minLength = 0,
             maxLength = 500,
             showOnList = true,
-            uiType = UIType.text_field,
+            uiType = UIType.TEXT_FIELD,
             values = null,
             id = 1,
-            pageName = "BUILDING_MAPPING"
+            pageName = "BUILDING_MAPPING",
+            columnValue = ""
         )
         capstoneDao.insertFieldsEntity(fieldsEntity)
 
         // Update the fields entity
-        val updatedFieldsEntity = fieldsEntity.copy(columnTitle = "Updated Name of Building")
+        val updatedFieldsEntity = fieldsEntity.copy(fieldTitle = "Updated Name of Building")
         capstoneDao.updateFieldEntity(updatedFieldsEntity)
 
 
@@ -81,7 +82,7 @@ class CapstoneDaoTest : KoinTest {
 
         assertEquals(updatedFieldsEntity.formId, retrievedField.formId)
         assertEquals(updatedFieldsEntity.columnName, retrievedField.columnName)
-        assertEquals(updatedFieldsEntity.columnTitle, retrievedField.columnTitle)
+        assertEquals(updatedFieldsEntity.fieldTitle, retrievedField.fieldTitle)
         assertEquals(updatedFieldsEntity.columnType, retrievedField.columnType)
         assertEquals(updatedFieldsEntity.required, retrievedField.required)
         assertEquals(updatedFieldsEntity.minLength, retrievedField.minLength)
