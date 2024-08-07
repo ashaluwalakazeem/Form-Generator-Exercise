@@ -65,6 +65,10 @@ internal class FormRepositoryImpl(
         capstoneDao.updateFieldEntities(fieldsEntities)
     }
 
+    override suspend fun fetchFormEntity(formId: Int): FormEntity {
+        return capstoneDao.getFormEntity(formId)
+    }
+
     companion object{
         private const val TAG = "FormRepositoryImpl"
     }

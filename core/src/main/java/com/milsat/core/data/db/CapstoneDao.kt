@@ -18,6 +18,9 @@ internal interface CapstoneDao {
     @Query("SELECT * FROM forms")
     fun getAllFormEntities(): Flow<List<FormEntity>>
 
+    @Query("SELECT * FROM forms WHERE id = :formId LIMIT 1")
+    fun getFormEntity(formId: Int): FormEntity
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFieldsEntity(fieldsEntity: FieldsEntity): Long

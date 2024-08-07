@@ -14,4 +14,6 @@ interface FormRepository {
     suspend fun fetchAllFormFields(formId: Int): List<FieldsEntity>
 
     suspend fun submitForm(fieldsEntities: List<FieldsEntity>)
+
+    suspend fun fetchFormEntity(formId: Int): FormEntity
 }

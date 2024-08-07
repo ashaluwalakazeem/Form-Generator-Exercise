@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
@@ -70,15 +71,22 @@ fun FormScreen(
                             tint = Color.White
                         )
                     }
+                },
+                actions = {
+                    IconButton(onClick = viewModel::exportForm) {
+                        Icon(
+                            imageVector = Icons.Rounded.Share,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
                 }
             )
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {
-                    viewModel.submit(
-                        onProceed = onNavigateBack
-                    )
+                    viewModel.submit()
                 },
             ) {
                 Text(text = "Save Form")

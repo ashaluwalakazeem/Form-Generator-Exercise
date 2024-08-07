@@ -7,8 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.milsat.capstone.utils.ArgumentBundleKeys
 import com.milsat.core.domain.model.FormPage
+import com.milsat.core.domain.usecase.FetchFormEntityUseCase
 import com.milsat.core.domain.usecase.FetchFormFieldsUseCase
 import com.milsat.core.domain.usecase.SubmitFormUseCase
+import com.milsat.core.utils.CsvUtils
 import com.milsat.core.utils.Logger
 import com.milsat.core.utils.Result
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +23,9 @@ import org.koin.core.component.inject
 class FormScreenViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val fetchFormFieldsUseCase: FetchFormFieldsUseCase,
-    private val submitFormUseCase: SubmitFormUseCase
+    private val submitFormUseCase: SubmitFormUseCase,
+    private val csvUtils: CsvUtils,
+    private val fetchFormEntityUseCase: FetchFormEntityUseCase
 ) : ViewModel(), KoinComponent {
     private val context: Context by inject()
 
@@ -53,15 +57,10 @@ class FormScreenViewModel(
         }
     }
 
-    fun submit(
-        onProceed: () -> Unit
-    ) {
+    fun submit() {
         viewModelScope.launch {
             when (val result = submitFormUseCase(formPages = formPagesState.value.formPages)) {
                 is Result.Success -> {
-                    if (result.data) {
-                        onProceed()
-                    }
                     Toast.makeText(context, result.msg, Toast.LENGTH_LONG).show()
                 }
 
@@ -69,6 +68,18 @@ class FormScreenViewModel(
                     Toast.makeText(context, result.cause.message, Toast.LENGTH_LONG).show()
                 }
             }
+        }
+    }
+
+    fun exportForm() {
+        try {
+            val formId = formId?.toIntOrNull() ?: return
+            viewModelScope.launch {
+                val formEntity = fetchFormEntityUseCase(formId = formId)
+                csvUtils.exportFieldEntitiesToCsv(formName = formEntity.name, formInt = formId)
+            }
+        } catch (e: Exception) {
+            Toast.makeText(context, "Unexpected error occurred", Toast.LENGTH_LONG).show()
         }
     }
 
