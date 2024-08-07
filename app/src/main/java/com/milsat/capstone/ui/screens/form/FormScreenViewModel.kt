@@ -5,6 +5,8 @@ import android.widget.Toast
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.milsat.capstone.ui.screens.form.components.FieldTitle
+import com.milsat.capstone.ui.screens.form.components.Index
 import com.milsat.capstone.utils.ArgumentBundleKeys
 import com.milsat.core.domain.model.FormPage
 import com.milsat.core.domain.usecase.FetchFormEntityUseCase
@@ -51,9 +53,25 @@ class FormScreenViewModel(
                     _formPagesState.update {
                         it.copy(formPages = result.data)
                     }
+                    initializeSkipLogic()
                 }
             }
             Logger.debug(TAG, "${_formPagesState.value}")
+        }
+    }
+
+    private fun initializeSkipLogic() {
+        _formPagesState.value.formPages.forEachIndexed { pageIndex, formPage ->
+            formPage.formFields.forEachIndexed { fieldIndex, formFieldState ->
+                if (formFieldState.fieldsEntity.skipTo != null) {
+                    onSkipTo(
+                        currentFieldIndex = fieldIndex,
+                        skippingTo = formFieldState.fieldsEntity.skipTo ?: "",
+                        selectedPageIndex = pageIndex,
+                        enable = formFieldState.fieldsEntity.columnValue.lowercase() != "yes"
+                    )
+                }
+            }
         }
     }
 
@@ -81,6 +99,27 @@ class FormScreenViewModel(
         } catch (e: Exception) {
             Toast.makeText(context, "Unexpected error occurred", Toast.LENGTH_LONG).show()
         }
+    }
+
+    fun onSkipTo(
+        currentFieldIndex: Index,
+        skippingTo: FieldTitle,
+        selectedPageIndex: Index,
+        enable: Boolean
+    ) {
+        val updatedFormPages = _formPagesState.value.formPages.toMutableList()
+
+        // Disable all fields after the current field
+        for (i in currentFieldIndex + 1 until updatedFormPages[selectedPageIndex].formFields.size) {
+            // If we find the target field, stop disabling subsequent fields
+            val formField = updatedFormPages[selectedPageIndex].formFields[i]
+            if (formField.fieldsEntity.fieldTitle == skippingTo) {
+                break
+            }
+            formField.setEnabled(enable)
+        }
+
+        _formPagesState.value = FormScreenState(updatedFormPages)
     }
 
     companion object {

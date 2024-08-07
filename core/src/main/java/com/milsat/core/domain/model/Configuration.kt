@@ -18,7 +18,9 @@ internal data class Configuration(
         @SerialName("min_length") val minLength: Int? = null,
         @SerialName("max_length") val maxLength: Int? = null,
         @SerialName("showOnList") val showOnList: Boolean? = null,
-        val values: List<String>? = null
+        val values: List<String>? = null,
+        @SerialName("skipTo")
+        val skipTo: Map<String, String>? = null
     ){
         fun toDomain(formId: Int, fieldTitle: String, pageName: String): FieldsEntity{
             return FieldsEntity(
@@ -32,7 +34,8 @@ internal data class Configuration(
                 maxLength = maxLength,
                 showOnList = showOnList,
                 uiType = uiType.toUIType(),
-                values = values
+                values = values,
+                skipTo = skipTo?.getOrDefault("NO", null)
             )
         }
     }

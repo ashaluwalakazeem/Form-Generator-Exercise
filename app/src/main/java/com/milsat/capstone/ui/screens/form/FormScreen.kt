@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Edit
@@ -35,7 +36,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.milsat.capstone.ui.components.SpacerHeight
+import com.milsat.capstone.ui.screens.form.components.FieldTitle
 import com.milsat.capstone.ui.screens.form.components.FormFieldItem
+import com.milsat.capstone.ui.screens.form.components.Index
 import com.milsat.core.domain.model.FormFieldState
 import org.koin.androidx.compose.koinViewModel
 
@@ -132,11 +135,15 @@ fun FormScreen(
                         .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
-                    items(uiState.formPages[selectedTabIndex].formFields) { item: FormFieldState ->
+                    itemsIndexed(uiState.formPages[selectedTabIndex].formFields) { index: Int, item: FormFieldState ->
                         FormFieldItem(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            formFieldState = item
+                            formFieldState = item,
+                            index = index,
+                            onSkipTo = { currentFieldIndex: Index, title: FieldTitle, enabled: Boolean ->
+                                viewModel.onSkipTo(currentFieldIndex = currentFieldIndex, title, selectedPageIndex = selectedTabIndex, enable = enabled)
+                            }
                         )
                     }
                     item {}

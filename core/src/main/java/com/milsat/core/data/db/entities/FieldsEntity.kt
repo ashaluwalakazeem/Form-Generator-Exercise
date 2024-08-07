@@ -22,4 +22,5 @@ data class FieldsEntity(
     val showOnList: Boolean? = null,
     val uiType: UIType,
     val values: List<String>?,
+    val skipTo: String?
 )

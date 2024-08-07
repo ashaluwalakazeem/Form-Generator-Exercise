@@ -1,6 +1,7 @@
 package com.milsat.capstone.ui.screens.form.components
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,10 +26,15 @@ import com.milsat.core.domain.model.FormFieldState
 import com.milsat.core.domain.model.UIType
 import com.milsat.core.domain.model.toKeyboardType
 
+typealias Index = Int
+typealias FieldTitle = String
+
 @Composable
 fun FormFieldItem(
     modifier: Modifier = Modifier,
-    formFieldState: FormFieldState
+    formFieldState: FormFieldState,
+    index: Int,
+    onSkipTo: (Index, FieldTitle, Boolean) -> Unit
 ) {
 
     Surface(
@@ -42,7 +48,7 @@ fun FormFieldItem(
                 UIType.TEXT_FIELD -> {
                     val isError by formFieldState.isTempValueInValid.collectAsStateWithLifecycle()
                     val tempValue by formFieldState.tempValue.collectAsStateWithLifecycle()
-
+                    val isEnabled by formFieldState.isFormEnabled.collectAsStateWithLifecycle()
                     UIComponentTextField(
                         value = tempValue,
                         hint = formFieldState.fieldsEntity.columnName,
@@ -60,48 +66,65 @@ fun FormFieldItem(
                             fieldName = formFieldState.fieldsEntity.fieldTitle,
                             isRequired = formFieldState.fieldsEntity.required,
                             enableMaximum = formFieldState.fieldsEntity.maxLength != null,
-                            maximumCount = formFieldState.fieldsEntity.maxLength ?: Int.MAX_VALUE,
+                            maximumCount = formFieldState.fieldsEntity.maxLength
+                                ?: Int.MAX_VALUE,
                             enableMinimum = formFieldState.fieldsEntity.minLength != null,
                             minimumCount = formFieldState.fieldsEntity.minLength ?: 1,
                             isDigit = formFieldState.fieldsEntity.columnType == ColumnType.NUMBER,
                             isAnInputField = formFieldState.fieldsEntity.uiType == UIType.TEXT_FIELD
-                        )
+                        ),
+                        isEnabled = isEnabled
                     )
+
                 }
 
                 UIType.DROP_DOWN -> {
                     val options = formFieldState.fieldsEntity.values ?: emptyList()
                     val isError by formFieldState.isTempValueInValid.collectAsStateWithLifecycle()
                     val tempValue by formFieldState.tempValue.collectAsStateWithLifecycle()
+                    val isEnabled by formFieldState.isFormEnabled.collectAsStateWithLifecycle()
 
-                    UIComponentTextFieldWithDropDown(
-                        value = tempValue,
-                        hint = "SELECT OPTION",
-                        label = formFieldState.fieldsEntity.fieldTitle,
-                        onValueChange = { value: String ->
-                            formFieldState.setValue(value)
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = formFieldState.fieldsEntity.columnType.toKeyboardType(),
-                            capitalization = KeyboardCapitalization.Sentences
-                        ),
-                        isRequired = formFieldState.fieldsEntity.required,
-                        isError = isError,
-                        errorMessage = tempValue.generateErrorMessage(
-                            fieldName = formFieldState.fieldsEntity.fieldTitle,
+                    Column {
+                        UIComponentTextFieldWithDropDown(
+                            value = tempValue,
+                            hint = "SELECT OPTION",
+                            label = formFieldState.fieldsEntity.fieldTitle,
+                            onValueChange = { value: String ->
+                                formFieldState.setValue(value)
+                            },
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = formFieldState.fieldsEntity.columnType.toKeyboardType(),
+                                capitalization = KeyboardCapitalization.Sentences
+                            ),
                             isRequired = formFieldState.fieldsEntity.required,
-                            enableMaximum = formFieldState.fieldsEntity.maxLength != null,
-                            maximumCount = formFieldState.fieldsEntity.maxLength ?: Int.MAX_VALUE,
-                            enableMinimum = formFieldState.fieldsEntity.minLength != null,
-                            minimumCount = formFieldState.fieldsEntity.minLength ?: 1,
-                            isDigit = formFieldState.fieldsEntity.columnType == ColumnType.NUMBER,
-                            isAnInputField = formFieldState.fieldsEntity.uiType == UIType.TEXT_FIELD
-                        ),
-                        options = options,
-                        onOptionClicked = { value: String ->
-                            formFieldState.setValue(value)
-                        },
-                    )
+                            isError = isError,
+                            errorMessage = tempValue.generateErrorMessage(
+                                fieldName = formFieldState.fieldsEntity.fieldTitle,
+                                isRequired = formFieldState.fieldsEntity.required,
+                                enableMaximum = formFieldState.fieldsEntity.maxLength != null,
+                                maximumCount = formFieldState.fieldsEntity.maxLength
+                                    ?: Int.MAX_VALUE,
+                                enableMinimum = formFieldState.fieldsEntity.minLength != null,
+                                minimumCount = formFieldState.fieldsEntity.minLength ?: 1,
+                                isDigit = formFieldState.fieldsEntity.columnType == ColumnType.NUMBER,
+                                isAnInputField = formFieldState.fieldsEntity.uiType == UIType.TEXT_FIELD
+                            ),
+                            options = options,
+                            onOptionClicked = { value: String ->
+                                formFieldState.setValue(value)
+                                formFieldState.fieldsEntity.skipTo?.let { skipTo: String ->
+                                    onSkipTo(index, skipTo, value.lowercase() != "yes")
+                                }
+                            },
+                            isEnabled = isEnabled
+                        )
+                        formFieldState.fieldsEntity.skipTo?.let { skipTo ->
+                            Text(
+                                text = "Selecting yes skips this form to $skipTo",
+                                style = MaterialTheme.typography.labelMedium,
+                            )
+                        }
+                    }
                 }
 
                 UIType.UNKNOWN -> {
