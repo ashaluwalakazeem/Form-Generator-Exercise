@@ -7,6 +7,7 @@ import com.milsat.core.domain.repository.FormRepository
 import com.milsat.core.domain.usecase.CreateNewFormUseCase
 import com.milsat.core.domain.usecase.FetchFormFieldsUseCase
 import com.milsat.core.domain.usecase.GetAllFormUseCase
+import com.milsat.core.domain.usecase.SubmitFormUseCase
 import com.milsat.core.utils.JsonFileSelector
 import com.milsat.core.utils.ConfigurationPasser
 import com.milsat.core.utils.FormPageGenerator
@@ -35,4 +36,5 @@ val coreModules = module {
     factoryOf(::CreateNewFormUseCase)
     factoryOf(::GetAllFormUseCase)
     factoryOf(::FetchFormFieldsUseCase)
+    factoryOf(::SubmitFormUseCase)
 }

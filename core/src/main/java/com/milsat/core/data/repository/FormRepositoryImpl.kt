@@ -7,6 +7,7 @@ import com.milsat.core.domain.model.Configuration
 import com.milsat.core.domain.repository.FormRepository
 import com.milsat.core.utils.ConfigurationPasser
 import com.milsat.core.utils.ErrorResponse
+import com.milsat.core.utils.Logger
 import com.milsat.core.utils.Result
 import com.milsat.core.utils.parseError
 import kotlinx.coroutines.Dispatchers
@@ -60,4 +61,11 @@ internal class FormRepositoryImpl(
         return capstoneDao.getFieldsByFormId(formId)
     }
 
+    override suspend fun submitForm(fieldsEntities: List<FieldsEntity>) {
+        capstoneDao.updateFieldEntities(fieldsEntities)
+    }
+
+    companion object{
+        private const val TAG = "FormRepositoryImpl"
+    }
 }

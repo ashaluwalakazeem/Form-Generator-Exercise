@@ -1,6 +1,5 @@
 package com.milsat.capstone.ui.screens.form.components
 
-import android.provider.Contacts.Intents.UI
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,12 +9,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.milsat.capstone.ui.components.UIComponentTextField
 import com.milsat.capstone.ui.components.UIComponentTextFieldWithDropDown
 import com.milsat.capstone.utils.generateErrorMessage
@@ -39,22 +40,15 @@ fun FormFieldItem(
 
             when (formFieldState.fieldsEntity.uiType) {
                 UIType.TEXT_FIELD -> {
-                    val isError =
-                        formFieldState.fieldsEntity.required && formFieldState.tempValue.value.isBlank() || (formFieldState.fieldsEntity.minLength != null && (formFieldState.fieldsEntity.minLength
-                            ?: 0) > formFieldState.tempValue.value.length) || (formFieldState.fieldsEntity.maxLength != null && (formFieldState.tempValue.value.length > (formFieldState.fieldsEntity.maxLength
-                            ?: 0)))
+                    val isError by formFieldState.isTempValueInValid.collectAsStateWithLifecycle()
+                    val tempValue by formFieldState.tempValue.collectAsStateWithLifecycle()
 
                     UIComponentTextField(
-                        value = formFieldState.tempValue.value,
+                        value = tempValue,
                         hint = formFieldState.fieldsEntity.columnName,
                         label = formFieldState.fieldsEntity.fieldTitle,
-                        onValueChange = {
-                            if (
-                                formFieldState.fieldsEntity.maxLength == null || (it.length <= (formFieldState.fieldsEntity.maxLength
-                                    ?: 0))
-                            ) {
-                                formFieldState.tempValue.value = it
-                            }
+                        onValueChange = { value: String ->
+                            formFieldState.setValue(value)
                         },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = formFieldState.fieldsEntity.columnType.toKeyboardType(),
@@ -62,7 +56,7 @@ fun FormFieldItem(
                         ),
                         isRequired = formFieldState.fieldsEntity.required,
                         isError = isError,
-                        errorMessage = formFieldState.tempValue.value.generateErrorMessage(
+                        errorMessage = tempValue.generateErrorMessage(
                             fieldName = formFieldState.fieldsEntity.fieldTitle,
                             isRequired = formFieldState.fieldsEntity.required,
                             enableMaximum = formFieldState.fieldsEntity.maxLength != null,
@@ -77,20 +71,15 @@ fun FormFieldItem(
 
                 UIType.DROP_DOWN -> {
                     val options = formFieldState.fieldsEntity.values ?: emptyList()
-                    val isError =
-                        formFieldState.fieldsEntity.required && formFieldState.tempValue.value.isBlank()
+                    val isError by formFieldState.isTempValueInValid.collectAsStateWithLifecycle()
+                    val tempValue by formFieldState.tempValue.collectAsStateWithLifecycle()
 
                     UIComponentTextFieldWithDropDown(
-                        value = formFieldState.tempValue.value,
-                        hint = options.firstOrNull() ?: formFieldState.fieldsEntity.columnName,
+                        value = tempValue,
+                        hint = "SELECT OPTION",
                         label = formFieldState.fieldsEntity.fieldTitle,
-                        onValueChange = {
-                            if (
-                                formFieldState.fieldsEntity.maxLength == null || (it.length < (formFieldState.fieldsEntity.maxLength
-                                    ?: 0))
-                            ) {
-                                formFieldState.tempValue.value = it
-                            }
+                        onValueChange = { value: String ->
+                            formFieldState.setValue(value)
                         },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = formFieldState.fieldsEntity.columnType.toKeyboardType(),
@@ -98,7 +87,7 @@ fun FormFieldItem(
                         ),
                         isRequired = formFieldState.fieldsEntity.required,
                         isError = isError,
-                        errorMessage = formFieldState.tempValue.value.generateErrorMessage(
+                        errorMessage = tempValue.generateErrorMessage(
                             fieldName = formFieldState.fieldsEntity.fieldTitle,
                             isRequired = formFieldState.fieldsEntity.required,
                             enableMaximum = formFieldState.fieldsEntity.maxLength != null,
@@ -109,8 +98,8 @@ fun FormFieldItem(
                             isAnInputField = formFieldState.fieldsEntity.uiType == UIType.TEXT_FIELD
                         ),
                         options = options,
-                        onOptionClicked = {
-                            formFieldState.tempValue.value = it
+                        onOptionClicked = { value: String ->
+                            formFieldState.setValue(value)
                         },
                     )
                 }
