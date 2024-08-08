@@ -7,12 +7,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
@@ -21,6 +22,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -30,11 +32,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.milsat.capstone.R
 import com.milsat.capstone.ui.components.SpacerHeight
 import com.milsat.capstone.ui.screens.form.components.FieldTitle
 import com.milsat.capstone.ui.screens.form.components.FormFieldItem
@@ -79,6 +87,13 @@ fun FormScreen(
                     IconButton(onClick = viewModel::exportForm) {
                         Icon(
                             imageVector = Icons.Rounded.Share,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                    IconButton(onClick = viewModel::syncToGoogleSheet) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.cloud_sync_24dp_e8eaed_fill0_wght400_grad0_opsz24),
                             contentDescription = null,
                             tint = Color.White
                         )
@@ -142,7 +157,12 @@ fun FormScreen(
                             formFieldState = item,
                             index = index,
                             onSkipTo = { currentFieldIndex: Index, title: FieldTitle, enabled: Boolean ->
-                                viewModel.onSkipTo(currentFieldIndex = currentFieldIndex, title, selectedPageIndex = selectedTabIndex, enable = enabled)
+                                viewModel.onSkipTo(
+                                    currentFieldIndex = currentFieldIndex,
+                                    title,
+                                    selectedPageIndex = selectedTabIndex,
+                                    enable = enabled
+                                )
                             }
                         )
                     }
@@ -151,6 +171,34 @@ fun FormScreen(
                     item {}
                     item {}
                     item {}
+                }
+            }
+        }
+    }
+
+    if (uiState.isSyncing) {
+        Dialog(
+            onDismissRequest = { /*TODO*/ },
+            properties = DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false)
+        ) {
+            Surface(
+                color = Color.White,
+                shape = RoundedCornerShape(20.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator()
+                    SpacerHeight(height = 20.dp)
+                    Text(
+                        text = "Syncing this form to the provided Google Sheet url.",
+                        style = MaterialTheme.typography.labelMedium,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }

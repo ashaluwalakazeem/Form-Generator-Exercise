@@ -21,18 +21,6 @@ class CsvUtils : KoinComponent {
     private val capstoneDao: CapstoneDao by inject()
     private val context: Context by inject()
 
-    // Convert the list of objects to CSV format
-    private fun convertFormToCsv(fieldEntities: List<FieldsEntity>): String {
-        val columnTypeConverter = ColumnTypeConverter()
-        val uiTypeConverter = UITypeConverter()
-        return buildString {
-            append("S/N, Column Name, Field Title, Value, Page Name, Column Type, Required, Min Length, Max Length, Show On List, UI Type, Drop Down Values, Skip To\n")
-            fieldEntities.forEachIndexed { index, fieldEntity ->
-                append("${index + 1},${fieldEntity.columnName},${fieldEntity.fieldTitle},${fieldEntity.columnValue},${fieldEntity.pageName},${columnTypeConverter.fromColumnType(fieldEntity.columnType)},${fieldEntity.required},${fieldEntity.minLength},${fieldEntity.maxLength},${fieldEntity.showOnList},${uiTypeConverter.fromUIType(fieldEntity.uiType)},[${fieldEntity.values?.joinToString(separator = " | ")}],${fieldEntity.skipTo}\n")
-            }
-        }
-    }
-
     // Save the CSV string to a temporary file
     private fun saveCsvToTempFile(csvData: String, fileName: String): File? {
         val tempFile = File(context.cacheDir, fileName)
@@ -70,6 +58,21 @@ class CsvUtils : KoinComponent {
             withContext(Dispatchers.Main) {
                 csvFile?.let {
                     shareFile(it)
+                }
+            }
+        }
+    }
+
+    companion object {
+
+        // Convert the list of objects to CSV format
+        fun convertFormToCsv(fieldEntities: List<FieldsEntity>): String {
+            val columnTypeConverter = ColumnTypeConverter()
+            val uiTypeConverter = UITypeConverter()
+            return buildString {
+                append("S/N, Column Name, Field Title, Value, Page Name, Column Type, Required, Min Length, Max Length, Show On List, UI Type, Drop Down Values, Skip To\n")
+                fieldEntities.forEachIndexed { index, fieldEntity ->
+                    append("${index + 1},${fieldEntity.columnName},${fieldEntity.fieldTitle},${fieldEntity.columnValue},${fieldEntity.pageName},${columnTypeConverter.fromColumnType(fieldEntity.columnType)},${fieldEntity.required},${fieldEntity.minLength},${fieldEntity.maxLength},${fieldEntity.showOnList},${uiTypeConverter.fromUIType(fieldEntity.uiType)},[${fieldEntity.values?.joinToString(separator = " | ")}],${fieldEntity.skipTo}\n")
                 }
             }
         }

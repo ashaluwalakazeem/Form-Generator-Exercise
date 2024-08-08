@@ -44,8 +44,12 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/INDEX.LIST"
+            excludes += "/META-INF/DEPENDENCIES"
         }
     }
+
+    packagingOptions { resources.excludes.add("META-INF/*") }
 }
 
 dependencies {
@@ -76,6 +80,13 @@ dependencies {
     // GSON
     implementation(libs.gson)
 
+    // KotlinX Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
+
+    // Google Sheet
+    implementation("com.google.apis:google-api-services-sheets:v4-rev20240716-2.0.0")
+    implementation("com.google.api-client:google-api-client-gson:1.33.2")
+
     //Testing dependencies
     testImplementation("androidx.arch.core:core-testing:2.1.0")
     testImplementation(libs.junit)
@@ -90,6 +101,5 @@ dependencies {
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     testImplementation("androidx.room:room-testing:")
     testImplementation("androidx.test:runner:1.4.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
 
 }

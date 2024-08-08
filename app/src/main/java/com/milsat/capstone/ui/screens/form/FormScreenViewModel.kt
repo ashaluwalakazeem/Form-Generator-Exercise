@@ -13,6 +13,7 @@ import com.milsat.core.domain.usecase.FetchFormEntityUseCase
 import com.milsat.core.domain.usecase.FetchFormFieldsUseCase
 import com.milsat.core.domain.usecase.SubmitFormUseCase
 import com.milsat.core.utils.CsvUtils
+import com.milsat.core.utils.GoogleSheetsUtils
 import com.milsat.core.utils.Logger
 import com.milsat.core.utils.Result
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +28,8 @@ class FormScreenViewModel(
     private val fetchFormFieldsUseCase: FetchFormFieldsUseCase,
     private val submitFormUseCase: SubmitFormUseCase,
     private val csvUtils: CsvUtils,
-    private val fetchFormEntityUseCase: FetchFormEntityUseCase
+    private val fetchFormEntityUseCase: FetchFormEntityUseCase,
+    private val googleSheetsUtils: GoogleSheetsUtils
 ) : ViewModel(), KoinComponent {
     private val context: Context by inject()
 
@@ -122,11 +124,30 @@ class FormScreenViewModel(
         _formPagesState.value = FormScreenState(updatedFormPages)
     }
 
+    fun syncToGoogleSheet() {
+        val formId = formId?.toIntOrNull() ?: return
+        viewModelScope.launch {
+            _formPagesState.update { it.copy(isSyncing = true) }
+            when (val result = googleSheetsUtils.sync(formId)) {
+                is Result.Error -> {
+                    _formPagesState.update { it.copy(isSyncing = false) }
+                    Toast.makeText(context, result.cause.message, Toast.LENGTH_LONG).show()
+                }
+
+                is Result.Success -> {
+                    _formPagesState.update { it.copy(isSyncing = false) }
+                    Toast.makeText(context, result.msg, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
     companion object {
         private const val TAG = "FormScreenViewModel"
     }
 }
 
 data class FormScreenState(
-    val formPages: List<FormPage> = emptyList()
+    val formPages: List<FormPage> = emptyList(),
+    val isSyncing: Boolean = false
 )

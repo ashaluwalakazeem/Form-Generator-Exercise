@@ -64,7 +64,8 @@ class CapstoneDaoTest : KoinTest {
             values = null,
             id = 1,
             pageName = "BUILDING_MAPPING",
-            columnValue = ""
+            columnValue = "",
+            skipTo = ""
         )
         capstoneDao.insertFieldsEntity(fieldsEntity)
 
