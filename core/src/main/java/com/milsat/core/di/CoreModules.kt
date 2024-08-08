@@ -13,6 +13,7 @@ import com.milsat.core.utils.JsonFileSelector
 import com.milsat.core.utils.ConfigurationPasser
 import com.milsat.core.utils.CsvUtils
 import com.milsat.core.utils.FormPageGenerator
+import com.milsat.core.utils.GoogleSheetsUtils
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -32,6 +33,7 @@ val coreModules = module {
     factoryOf(::ConfigurationPasser)
     factoryOf(::FormPageGenerator)
     singleOf(::CsvUtils)
+    singleOf(::GoogleSheetsUtils)
 
     // Repositories
     single<FormRepository> { FormRepositoryImpl(get(), get()) }

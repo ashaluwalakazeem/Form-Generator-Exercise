@@ -8,6 +8,7 @@ sealed class ErrorResponse(val message: String) {
     data class FormFieldError(val msg: String = "An unexpected error occurred while generating form fields") : ErrorResponse(msg)
     data class UnProcessableEntityError(val msg: String = "An unexpected error occurred while parsing the json file") : ErrorResponse(msg)
     class Unknown(msg: String = "An unexpected error occurred") : ErrorResponse(msg)
+    class ConnectionError(msg: String = "Couldn't reach server. Please ensure you are connected to a network") : ErrorResponse(msg)
 }
 
 

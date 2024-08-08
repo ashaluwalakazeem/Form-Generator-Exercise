@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -40,10 +38,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -52,7 +48,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -66,7 +61,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import com.milsat.capstone.utils.ifElse
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun UIComponentTextField(
     modifier: Modifier = Modifier,
@@ -107,18 +101,17 @@ fun UIComponentTextField(
     minimumLines: Int = 1,
     singleLine: Boolean = true,
     isRequired: Boolean = false,
-    isSelectField: Boolean = false,
 ) {
     var isFocused by remember { mutableStateOf(false) }
     var borderWidth by remember { mutableStateOf(0.dp) }
     var borderColor by remember { mutableStateOf(Color.Transparent) }
     val focusRequester = remember { FocusRequester() }
     val localSoftKeyboard = LocalSoftwareKeyboardController.current
-    var hasStartedTyping by rememberSaveable { mutableStateOf(false) }
+//    var hasStartedTyping by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(isFocused, isError, hasStartedTyping, isEnabled) {
+    LaunchedEffect(isFocused, isError, isEnabled) {
         borderWidth = 1.dp
-        borderColor = if (isEnabled) colorBorder else disableColor
+        borderColor = if(isError) Color(0xFFBA1A1A) else if (isEnabled) colorBorder else disableColor
     }
 
     LaunchedEffect(key1 = requestFocusOnStart) {
@@ -206,7 +199,7 @@ fun UIComponentTextField(
                                 .weight(1f),
                             value = value,
                             onValueChange = {
-                                hasStartedTyping = true
+//                                hasStartedTyping = true
                                 onValueChange(it)
                             },
                             keyboardActions = keyboardActions,
@@ -226,9 +219,6 @@ fun UIComponentTextField(
                                     LaunchedEffect(interactionSource) {
                                         interactionSource.interactions.collect {
                                             if (it is PressInteraction.Release) {
-                                                if(isSelectField) {
-                                                    hasStartedTyping = true
-                                                }
                                                 onContainerClicked?.invoke()
                                             }
                                         }
@@ -271,7 +261,7 @@ fun UIComponentTextField(
         }
 
         errorMessage?.run {
-            if (hasStartedTyping && isError) {
+            if (isError) {
                 Text(
                     text = errorMessage,
                     fontSize = 12.sp,
@@ -380,7 +370,6 @@ fun UIComponentTextFieldWithDropDown(
             colorBorder = colorBorder,
             textColor = textColor,
             isRequired = isRequired,
-            isSelectField = true,
         )
 
         DropdownMenu(
