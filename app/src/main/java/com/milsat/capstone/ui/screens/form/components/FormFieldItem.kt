@@ -122,6 +122,7 @@ fun FormFieldItem(
                             Text(
                                 text = "Selecting yes skips this form to $skipTo",
                                 style = MaterialTheme.typography.labelMedium,
+                                color = if(isEnabled) Color.Blue else Color(0XFFC4C4C4)
                             )
                         }
                     }
