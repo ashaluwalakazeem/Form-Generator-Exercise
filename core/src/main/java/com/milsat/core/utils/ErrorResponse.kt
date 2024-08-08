@@ -12,7 +12,7 @@ sealed class ErrorResponse(val message: String) {
 }
 
 
-internal fun Exception.parseError(isProtectedEndpoint: Boolean = false): ErrorResponse {
+internal fun Exception.parseError(): ErrorResponse {
     return when (this) {
 
         is JsonParseException -> {

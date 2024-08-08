@@ -81,25 +81,32 @@ dependencies {
     implementation(libs.gson)
 
     // KotlinX Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
+    implementation(libs.kotlinx.serialization.json)
 
     // Google Sheet
-    implementation("com.google.apis:google-api-services-sheets:v4-rev20240716-2.0.0")
-    implementation("com.google.api-client:google-api-client-gson:1.33.2")
+    implementation(libs.google.api.services.sheets)
+    implementation(libs.google.api.client.gson)
 
     //Testing dependencies
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
+    testImplementation(libs.androidx.core.testing)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.ui.test.manifest)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
-    testImplementation("io.insert-koin:koin-test:3.1.2")
-    testImplementation("io.insert-koin:koin-test-junit4:3.1.2")
-    androidTestImplementation("io.insert-koin:koin-test:3.1.2")
-    androidTestImplementation("io.insert-koin:koin-test-junit4:3.1.2")
-    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    testImplementation("androidx.room:room-testing:")
-    testImplementation("androidx.test:runner:1.4.0")
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.test.junit4)
+    androidTestImplementation(libs.koin.test)
+    androidTestImplementation(libs.koin.test.junit4)
+    testImplementation (libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.room.testing)
+    testImplementation(libs.androidx.runner)
+
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.mockk.agent)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.mockk.agent)
+
 
 }

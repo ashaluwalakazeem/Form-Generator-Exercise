@@ -4,7 +4,7 @@ import com.milsat.core.data.db.entities.FieldsEntity
 import com.milsat.core.domain.model.FormFieldState
 import com.milsat.core.domain.model.FormPage
 
-class FormPageGenerator() {
+class FormPageGenerator {
 
     fun generateFormPages(fieldsEntities: List<FieldsEntity>): Result<List<FormPage>> {
         return try {
