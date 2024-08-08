@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.content.FileProvider
 import com.milsat.core.data.db.CapstoneDao
+import com.milsat.core.data.db.ColumnTypeConverter
+import com.milsat.core.data.db.StringListConverter
+import com.milsat.core.data.db.UITypeConverter
 import com.milsat.core.data.db.entities.FieldsEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,10 +23,12 @@ class CsvUtils : KoinComponent {
 
     // Convert the list of objects to CSV format
     private fun convertFormToCsv(fieldEntities: List<FieldsEntity>): String {
+        val columnTypeConverter = ColumnTypeConverter()
+        val uiTypeConverter = UITypeConverter()
         return buildString {
-            append("S/N, Column Name, Title, Value\n")
+            append("S/N, Column Name, Field Title, Value, Page Name, Column Type, Required, Min Length, Max Length, Show On List, UI Type, Drop Down Values, Skip To\n")
             fieldEntities.forEachIndexed { index, fieldEntity ->
-                append("${index + 1},${fieldEntity.columnName},${fieldEntity.fieldTitle},${fieldEntity.columnValue}\n")
+                append("${index + 1},${fieldEntity.columnName},${fieldEntity.fieldTitle},${fieldEntity.columnValue},${fieldEntity.pageName},${columnTypeConverter.fromColumnType(fieldEntity.columnType)},${fieldEntity.required},${fieldEntity.minLength},${fieldEntity.maxLength},${fieldEntity.showOnList},${uiTypeConverter.fromUIType(fieldEntity.uiType)},[${fieldEntity.values?.joinToString(separator = " | ")}],${fieldEntity.skipTo}\n")
             }
         }
     }
