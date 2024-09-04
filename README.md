@@ -22,6 +22,7 @@ An app that
 - Github URL to the codebase: https://github.com/ashaluwalakazeem/Capstone-Kazeem
 - URL to the live Google Excel sheet (if "synch to the cloud" was implemented): https://docs.google.com/spreadsheets/d/1y05DXWOEqldnBzF5yjRMwgfFsDxBvWhCBgP_A6d3dZM/edit?usp=sharing
 - A screen record video showing what you built: https://drive.google.com/file/d/1bBkHY_Qu3T9g6QEJrOC1C8nqkGGkHiCG/view?usp=sharing
+- A sample configuration file that can be used to test the implemenation: https://drive.google.com/file/d/1zZEFBFQpY6x1V-sdps6BK-OIrVFnxUnU/view?usp=sharing
 
 
 ## Important Noted:
