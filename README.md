@@ -1,7 +1,7 @@
 
-# Capsone Exercise
+# Capsone
 
-Build a mobile app that meets the following criteria
+Task: Build a mobile app that meets the following criteria
 An app that
 - enables a user to create a new form using a "configuration file"
 - Users can fill out the form and save the records offline
